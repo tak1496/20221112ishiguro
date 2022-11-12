@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>COACHTECH</title>
+  <link href="css/style.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+
+    <div class="question1">
+      <h1>【切り替えタブ】</h1>
+      <div class="tab">
+        <ul class="tab-menu">
+          <li v-on:click="change('1')" v-bind:class="{'active': isActive === '1'}">タブ1</li>
+          <li v-on:click="change('2')" v-bind:class="{'active': isActive === '2'}">タブ2</li>
+          <li v-on:click="change('3')" v-bind:class="{'active': isActive === '3'}">タブ3</li>
+        </ul>
+        <div class="tab-content">
+          <div v-if="isActive === '1'">コンテンツ1</div>
+          <div v-else-if="isActive === '2'">コンテンツ2</div>
+          <div v-else-if="isActive === '3'">コンテンツ3</div>
+        </div>
+      </div>
+    </div>
+
+    <hr size="1">
+
+    <div class="question2">
+      <h1>【モーダルウィンドウ】</h1>
+      <input type="button" v-on:click="modal_open" class="modal_btn" value="modal open">
+    </div>
+
+    <div v-bind:class="modal_style">
+      <div class="modal__content">
+        <div class="modal__content-inner">
+          <div class="modal__closeBtn">
+            <h2>モーダルウィンドウ</h2>
+            <input type="button" v-on:click="modal_open" value="閉じる" class="closeBtn" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr size="1">
+    
+    <div class="question3">
+      <h1>【リアルタイム検索】</h1>
+      <input type="text" v-model="keyword">
+      <table>
+        <tr v-for="user in filteredUsers" :key="user.id">
+          <td v-text="user.name"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+
+<script>
+  new Vue({
+    el: '#app',
+    data: function() {
+      return {
+        isActive: '1',
+        modal_style: 'modal_close',
+        keyword: '',
+        users: [
+          {
+            id: 1,
+            name: '佐藤',
+          },
+          {
+            id: 2,
+            name: '山田',
+          },
+          {
+            id: 3,
+            name: '鈴木',
+          },
+          {
+            id: 4,
+            name: '田中'
+          },
+        ]
+      }
+    },
+    methods: {
+      change: function (num) {
+        this.isActive = num;
+      },
+      modal_open: function() {
+        if(this.modal_style === 'modal') {
+          this.modal_style = 'modal_close';
+        } else {
+          this.modal_style = 'modal';
+        }
+      }
+    },
+    computed: {
+      filteredUsers: function () {
+        var users = [];
+
+        for (var i in this.users) {
+          var user = this.users[i];
+          if (user.name.indexOf(this.keyword) !== -1) {
+            users.push(user);
+          }
+        }
+        return users;
+      }
+    }
+  })
+</script>
+</html>
